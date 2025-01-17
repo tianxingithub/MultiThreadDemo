@@ -4,12 +4,15 @@
 #include <QThread>
 #include <QDateTime>
 #include "Calculate.h"
+#include "CalculateInputStruct.h"
 
 MultiThreadDemo::MultiThreadDemo(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MultiThreadDemoClass())
 {
     ui->setupUi(this);
+
+    connect(ui->btn_calculate, &QPushButton::clicked, this, &MultiThreadDemo::btn_calculate_slot);
 
     mThread    = new QThread();
     mCalculate = new Calculate();
@@ -22,9 +25,9 @@ MultiThreadDemo::MultiThreadDemo(QWidget *parent)
 
 	//! 连接其他信号槽，用于触发线程执行槽函数里的任务
     //! 注意：在使用跨线程通信时，参数需要为元数据类型（具体我也解释不清楚，反正是有关 meta 什么的）
-    // 将结构体 CalculateInputStruct 注册为元数据类型，如果是继承自QObject的类，则不用注册
-	connect(this, &MultiThreadDemo::StartCalculate, mCalculate, &Calculate::startCalculateSlot,Qt::QueuedConnection);              // 默认使用Qt::QueuedConnection，保证槽函数的执行顺序
-	connect(mCalculate, &Calculate::CalculateFinished, this, &MultiThreadDemo::calculate_finished_slot/*, Qt::DirectConnection*/); // 有场景可能因为执行顺序问题，而不能正确响应，就需要用到 DirectConnection
+    qRegisterMetaType<CalculateInputStruct>("CalculateInputStruct");// 将结构体 CalculateInputStruct 注册为元数据类型，如果是继承自QObject的类，则不用注册
+	connect(this, &MultiThreadDemo::StartCalculate, mCalculate, &Calculate::startCalculateSlot, Qt::QueuedConnection);              // 默认使用Qt::QueuedConnection，保证槽函数的执行顺序
+	connect(mCalculate, &Calculate::CalculateFinished, this, &MultiThreadDemo::calculate_finished_slot, Qt::QueuedConnection); // 有场景可能因为执行顺序问题，而不能正确响应，就需要用到 DirectConnection
 
     mThread->start(); //启动线程，线程默认开启事件循环，并且线程正处于事件循环状态
 }
@@ -48,8 +51,8 @@ void MultiThreadDemo::btn_calculate_slot()
 
 void MultiThreadDemo::calculate_finished_slot()
 {
-	QString end_time_str = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+            mStartTime;
+	QString end_time_str = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zz");
 
-    auto time = end_time_str + " - " + mStartTime;
     int i = 1;
 }

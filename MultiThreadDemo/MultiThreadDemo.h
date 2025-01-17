@@ -29,5 +29,5 @@ private:
     Ui::MultiThreadDemoClass *ui;
     QThread*   mThread;    //!< 计算类执行的线程
     Calculate* mCalculate; //!< 计算类，放在mThread线程里面执行，避免界面卡死
-    QString mStartTime; //!< 记录开始计算时间
+    QString    mStartTime; //!< 记录开始计算时间
 };

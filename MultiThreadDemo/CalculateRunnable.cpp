@@ -3,7 +3,7 @@
 
 CalculateRunnable::CalculateRunnable()
 {
-	setAutoDelete(true);
+	setAutoDelete(true); // 任务结束后自动删除
 }
 
 CalculateRunnable::~CalculateRunnable()
