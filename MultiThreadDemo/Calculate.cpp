@@ -2,6 +2,8 @@
 #include <QThread>
 #include <QThreadPool>
 
+#include "CalculateRunnable.h"
+
 Calculate::Calculate(QObject* parent/*=nullptr*/)
 {
 
@@ -20,8 +22,8 @@ void Calculate::startCalculateSlot(const CalculateInputStruct aInput)
 	thread_pool.setMaxThreadCount(aInput.threadMaxCount); // 设置线程池的最大线程数为1
 	for (int i = 0; i < 20; i++) 
 	{
-
+		thread_pool.start(new CalculateRunnable);
 	}
-
+	thread_pool.waitForDone(); // 等待所有任务完成
 	emit CalculateFinished();
 }

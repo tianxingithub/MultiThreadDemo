@@ -2,6 +2,7 @@
 #include "ui_MultiThreadDemo.h"
 
 #include <QThread>
+#include <QDateTime>
 #include "Calculate.h"
 
 MultiThreadDemo::MultiThreadDemo(QWidget *parent)
@@ -42,9 +43,13 @@ void MultiThreadDemo::btn_calculate_slot()
 	input.threadMaxCount = ui->line_edit_thread_max_count->text().toInt();
 
     emit StartCalculate(input);
+    mStartTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zz");
 }
 
 void MultiThreadDemo::calculate_finished_slot()
 {
+	QString end_time_str = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
 
+    auto time = end_time_str + " - " + mStartTime;
+    int i = 1;
 }
