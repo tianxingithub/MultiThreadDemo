@@ -1,11 +1,6 @@
 #include "CalculateRunnable.h"
 #include <QThread>
 
-CalculateRunnable::CalculateRunnable()
-{
-	setAutoDelete(true); // 任务结束后自动删除
-}
-
 CalculateRunnable::~CalculateRunnable()
 {
 	auto test_thread_id = QThread::currentThreadId();
@@ -15,4 +10,5 @@ CalculateRunnable::~CalculateRunnable()
 void CalculateRunnable::run()
 {
 	QThread::msleep(500);
+// 	emit RunnableFinished();
 }

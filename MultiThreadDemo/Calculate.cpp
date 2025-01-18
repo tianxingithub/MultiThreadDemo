@@ -20,9 +20,13 @@ void Calculate::startCalculateSlot(const CalculateInputStruct aInput)
 
 	QThreadPool thread_pool;
 	thread_pool.setMaxThreadCount(aInput.threadMaxCount); // 设置线程池的最大线程数为1
-	for (int i = 0; i < 20; i++) 
+	for (int i = 0; i < aInput.calculateCount; i++)
 	{
-		thread_pool.start(new CalculateRunnable);
+		CalculateRunnable* runnable = new CalculateRunnable;
+		runnable->setAutoDelete(true);
+		thread_pool.start(runnable);
+
+// 		connect(runnable, &CalculateRunnable::RunnableFinished, this, [&]() {emit UpdateProssorbar(); }, Qt::QueuedConnection);
 	}
 	thread_pool.waitForDone(); // 等待所有任务完成
 	emit CalculateFinished();

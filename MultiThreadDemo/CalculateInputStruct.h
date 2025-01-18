@@ -6,4 +6,5 @@ typedef struct
 {
 	QString msg;
 	int threadMaxCount;
+	int calculateCount;
 }CalculateInputStruct; 

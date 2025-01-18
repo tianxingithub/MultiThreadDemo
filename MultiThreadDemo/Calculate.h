@@ -16,4 +16,5 @@ public slots:
 
 signals:
 	void CalculateFinished(); //!< 跨线程通信
+	void UpdateProssorbar();
 };

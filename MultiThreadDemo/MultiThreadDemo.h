@@ -24,10 +24,12 @@ signals:
 private:
     void btn_calculate_slot();
     void calculate_finished_slot();
+    void update_prossorbar_slot();
 
 private:
     Ui::MultiThreadDemoClass *ui;
     QThread*   mThread;    //!< 计算类执行的线程
     Calculate* mCalculate; //!< 计算类，放在mThread线程里面执行，避免界面卡死
     QString    mStartTime; //!< 记录开始计算时间
+	bool mIsCalculating{ false }; //!< 计算状态
 };
