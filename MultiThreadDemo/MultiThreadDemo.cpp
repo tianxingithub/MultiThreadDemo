@@ -42,11 +42,12 @@ void MultiThreadDemo::btn_calculate_slot()
 {
     if (mIsCalculating)
     {
-        ui->calculate_message->append("正在计算，请稍后...");
+        ui->calculate_message->append(u8"正在计算，请稍后...");
         return;
     }
     mIsCalculating = true;
-    QString start_msg = "开始计算，当前时间：" + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
+    QString start_msg = QString(u8"本次计算次数 %1，总共需要时间为 %3s，最大线程数量 %2\n").arg(ui->line_edit_calculate_count->text()).arg(ui->line_edit_thread_max_count->text()).arg(ui->line_edit_calculate_count->text().toInt()*0.5);
+    start_msg += u8"开始计算，当前时间：" + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
     ui->calculate_message->append(start_msg);
 
     auto test_thread_id = QThread::currentThreadId(); // 查看当前线程的id和计算类的id是否相同
@@ -54,13 +55,13 @@ void MultiThreadDemo::btn_calculate_slot()
     auto max_count_str = ui->line_edit_thread_max_count->text();
     if (max_count_str == "" || max_count_str.toInt() <= 0)
     {
-        ui->calculate_message->append("计算最大线程数量需要大于0！");
+        ui->calculate_message->append(u8"计算最大线程数量需要大于0！");
         return;
     }
     auto calculate_count_str = ui->line_edit_calculate_count->text();
     if (calculate_count_str == "" || calculate_count_str.toInt() <= 0)
     {
-        ui->calculate_message->append("计算次数需要大于0！");
+        ui->calculate_message->append(u8"计算次数需要大于0！");
         return;
     }
 
@@ -80,9 +81,9 @@ void MultiThreadDemo::btn_calculate_slot()
 void MultiThreadDemo::calculate_finished_slot()
 {
     mIsCalculating = false;
-	QString finished_msg = "计算完成，当前时间：" + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
+	QString finished_msg = u8"计算完成，当前时间：" + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
 	ui->calculate_message->append(finished_msg);
-    ui->calculate_message->append("=========================");
+    ui->calculate_message->append(u8"=========================");
     ui->calculate_message->append("");
     ui->calculate_message->append("");
 

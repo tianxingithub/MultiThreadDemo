@@ -10,5 +10,6 @@ CalculateRunnable::~CalculateRunnable()
 void CalculateRunnable::run()
 {
 	QThread::msleep(500);
+
 // 	emit RunnableFinished();
 }

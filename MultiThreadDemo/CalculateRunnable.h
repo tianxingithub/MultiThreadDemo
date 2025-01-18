@@ -2,7 +2,7 @@
 #include <QRunnable>
 #include <QObject>
 
-class CalculateRunnable : public QObject, public QRunnable
+class CalculateRunnable : /*public QObject,*/ public QRunnable
 {
 public:
 	~CalculateRunnable();
