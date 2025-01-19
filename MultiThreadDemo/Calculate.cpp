@@ -23,7 +23,7 @@ void Calculate::startCalculateSlot(const CalculateInputStruct aInput)
 	for (int i = 0; i < aInput.calculateCount; i++)
 	{
 		CalculateRunnable* runnable = new CalculateRunnable;
-		runnable->setAutoDelete(true);
+		runnable->setAutoDelete(true); // 设置任务结束后自动删除
 		thread_pool.start(runnable);
 
 // 		connect(runnable, &CalculateRunnable::RunnableFinished, this, [&]() {emit UpdateProssorbar(); }, Qt::QueuedConnection);
