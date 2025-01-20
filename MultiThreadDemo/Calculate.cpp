@@ -26,7 +26,7 @@ void Calculate::startCalculateSlot(const CalculateInputStruct aInput)
 		runnable->setAutoDelete(true); // 设置任务结束后自动删除
 		thread_pool.start(runnable);
 
-// 		connect(runnable, &CalculateRunnable::RunnableFinished, this, [&]() {emit UpdateProssorbar(); }, Qt::QueuedConnection);
+		connect(runnable, &CalculateRunnable::RunnableFinished, this, [&]() {emit UpdateProssorbar(); }, Qt::DirectConnection);
 	}
 	thread_pool.waitForDone(); // 等待所有任务完成
 	emit CalculateFinished();

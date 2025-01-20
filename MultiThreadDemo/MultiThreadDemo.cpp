@@ -30,7 +30,7 @@ MultiThreadDemo::MultiThreadDemo(QWidget *parent)
 	//! 连接其他信号槽，用于触发线程执行槽函数里的任务    
 	connect(this, &MultiThreadDemo::StartCalculate, mCalculate, &Calculate::startCalculateSlot, Qt::QueuedConnection); // 默认使用Qt::QueuedConnection，保证槽函数的执行顺序
 	connect(mCalculate, &Calculate::CalculateFinished, this, &MultiThreadDemo::calculate_finished_slot, Qt::QueuedConnection); 
-// 	connect(mCalculate, &Calculate::UpdateProssorbar, this, &MultiThreadDemo::update_prossorbar_slot, Qt::DirectConnection);
+	connect(mCalculate, &Calculate::UpdateProssorbar, this, &MultiThreadDemo::update_prossorbar_slot, Qt::QueuedConnection);
 
     mThread->start(); // 启动线程，线程默认开启事件循环，并且线程正处于事件循环状态
 }

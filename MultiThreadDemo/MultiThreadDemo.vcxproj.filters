@@ -51,12 +51,12 @@
     <QtMoc Include="Calculate.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="CalculateRunnable.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CalculateInputStruct.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CalculateRunnable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
