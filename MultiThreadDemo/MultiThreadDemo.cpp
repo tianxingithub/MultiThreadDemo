@@ -28,9 +28,9 @@ MultiThreadDemo::MultiThreadDemo(QWidget *parent)
 	qRegisterMetaType<CalculateInputStruct>("CalculateInputStruct"); // 将结构体 CalculateInputStruct 注册为元数据类型
 
 	//! 连接其他信号槽，用于触发线程执行槽函数里的任务    
-	connect(this, &MultiThreadDemo::StartCalculate, mCalculate, &Calculate::startCalculateSlot, Qt::QueuedConnection); // 默认使用Qt::QueuedConnection，保证槽函数的执行顺序
-	connect(mCalculate, &Calculate::CalculateFinished, this, &MultiThreadDemo::calculate_finished_slot, Qt::QueuedConnection); 
-	connect(mCalculate, &Calculate::UpdateProssorbar, this, &MultiThreadDemo::update_prossorbar_slot, Qt::QueuedConnection);
+	connect(this, &MultiThreadDemo::StartCalculate, mCalculate, &Calculate::startCalculateSlot, Qt::QueuedConnection);         // 默认使用Qt::QueuedConnection，保证槽函数的执行顺序
+	connect(mCalculate, &Calculate::CalculateFinished, this, &MultiThreadDemo::calculate_finished_slot, Qt::QueuedConnection); // 计算完成显示信息
+	connect(mCalculate, &Calculate::UpdateProssorbar, this, &MultiThreadDemo::update_prossorbar_slot, Qt::QueuedConnection);   // 每计算一次完一次任务，更新界面进度条
 
     mThread->start(); // 启动线程，线程默认开启事件循环，并且线程正处于事件循环状态
 }
