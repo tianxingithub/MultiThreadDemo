@@ -14,6 +14,7 @@ MultiThreadDemo::MultiThreadDemo(QWidget *parent)
     ui->setupUi(this);
 
     connect(ui->btn_calculate, &QPushButton::clicked, this, &MultiThreadDemo::btn_calculate_slot);
+    connect(ui->btn_cancel_calculate, &QPushButton::clicked, this, &MultiThreadDemo::btn_cancel_calculate_slot);
 
     mThread    = new QThread();
     mCalculate = new Calculate();
@@ -29,6 +30,7 @@ MultiThreadDemo::MultiThreadDemo(QWidget *parent)
 
 	//! 连接其他信号槽，用于触发线程执行槽函数里的任务    
 	connect(this, &MultiThreadDemo::StartCalculate, mCalculate, &Calculate::startCalculateSlot, Qt::QueuedConnection);         // 默认使用Qt::QueuedConnection，保证槽函数的执行顺序
+	connect(this, &MultiThreadDemo::CancleCalculate, mCalculate, &Calculate::cancelCalculateSlot, Qt::DirectConnection);
 	connect(mCalculate, &Calculate::CalculateFinished, this, &MultiThreadDemo::calculate_finished_slot, Qt::QueuedConnection); // 计算完成显示信息
 	connect(mCalculate, &Calculate::UpdateProssorbar, this, &MultiThreadDemo::update_prossorbar_slot, Qt::QueuedConnection);   // 每计算一次完一次任务，更新界面进度条
 
@@ -44,34 +46,39 @@ void MultiThreadDemo::btn_calculate_slot()
 {
 	auto test_thread_id = QThread::currentThreadId(); // 查看当前线程的id和计算类的id是否相同
 
+    //! 检查输入
+	auto max_count_str = ui->line_edit_thread_max_count->text();
+	if (max_count_str == "" || max_count_str.toInt() <= 0)
+	{
+		ui->calculate_message->append(u8"计算最大线程数量需要大于0！");
+		return;
+	}
+
+	auto calculate_count_str = ui->line_edit_calculate_count->text();
+	if (calculate_count_str == "" || calculate_count_str.toInt() <= 0)
+	{
+		ui->calculate_message->append(u8"计算次数需要大于0！");
+		return;
+	}
+
+    //! 判断是否在计算
     if (mIsCalculating)
     {
         ui->calculate_message->append(u8"正在计算，请稍后...");
         return;
     }
-    mIsCalculating    = true;
+    mIsCalculating = true;
 
+    //! 添加计算信息
     QString start_msg = 
         QString(u8"本次计算次数 %1，单线程需要时间为 %3s，当前计算线程数量 %2\n")
         .arg(ui->line_edit_calculate_count->text())
         .arg(ui->line_edit_thread_max_count->text())
         .arg(ui->line_edit_calculate_count->text().toInt()*0.5);
     start_msg += u8"开始计算，当前时间：" + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
-    ui->calculate_message->append(start_msg);
+    ui->calculate_message->append(start_msg);   
 
-    auto max_count_str  = ui->line_edit_thread_max_count->text();
-    if (max_count_str   == "" || max_count_str.toInt() <= 0)
-    {
-        ui->calculate_message->append(u8"计算最大线程数量需要大于0！");
-        return;
-    }
-    auto calculate_count_str = ui->line_edit_calculate_count->text();
-    if (calculate_count_str  == "" || calculate_count_str.toInt() <= 0)
-    {
-        ui->calculate_message->append(u8"计算次数需要大于0！");
-        return;
-    }
-
+    //! 设定输入参数
     CalculateInputStruct input;
 	input.msg            = "start";
 	input.threadMaxCount = max_count_str.toInt();
@@ -83,6 +90,11 @@ void MultiThreadDemo::btn_calculate_slot()
 
     emit StartCalculate(input);
     mStartTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zz");
+}
+
+void MultiThreadDemo::btn_cancel_calculate_slot()
+{
+    emit CancleCalculate();
 }
 
 void MultiThreadDemo::calculate_finished_slot()

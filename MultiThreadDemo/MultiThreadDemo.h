@@ -20,9 +20,11 @@ public:
 
 signals:
     void StartCalculate(const CalculateInputStruct aInput); //!< 让计算类开始计算
+    void CancleCalculate(); //!< 取消计算
 
 private:
     void btn_calculate_slot();
+    void btn_cancel_calculate_slot();
     void calculate_finished_slot();
     void update_prossorbar_slot();
 
