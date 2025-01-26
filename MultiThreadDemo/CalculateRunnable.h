@@ -10,8 +10,10 @@ class CalculateRunnable : public QObject, public QRunnable
 	Q_OBJECT
 public:
 	~CalculateRunnable();
+
 signals:
-	void RunnableFinished();
+	void runnableFinishedSignal(); 
+
 protected:
 	void run() override;
 };

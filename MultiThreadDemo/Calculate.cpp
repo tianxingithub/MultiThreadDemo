@@ -14,7 +14,7 @@ Calculate::~Calculate()
 
 }
 
-void Calculate::startCalculateSlot(const CalculateInputStruct aInput)
+void Calculate::startCalculate(const CalculateInputStruct aInput)
 {
 	auto test_thread_id = QThread::currentThreadId(); // 查看当前线程的id和界面类、任务类的id是否相同
 
@@ -27,16 +27,16 @@ void Calculate::startCalculateSlot(const CalculateInputStruct aInput)
 		mThreadPool->start(runnable);
 
 		//! 设置响应方式为消息队列时，会在emit CalculateFinished(); 后再响应，故这里使用直接响应
-		connect(runnable, &CalculateRunnable::RunnableFinished, this, [&]() {emit UpdateProssorbar(); }, Qt::DirectConnection); 		
+		connect(runnable, &CalculateRunnable::runnableFinishedSignal, this, [&]() {emit updateProssorbarSignal(); }, Qt::DirectConnection); 		
 	}
 	mThreadPool->waitForDone(); // 等待所有任务完成
-	emit CalculateFinished();
+	emit calculateFinishedSignal();
 
 	delete mThreadPool;
 	mThreadPool = nullptr;
 }
 
-void Calculate::cancelCalculateSlot()
+void Calculate::cancelCalculate()
 {
 	if (mThreadPool)
 	{
