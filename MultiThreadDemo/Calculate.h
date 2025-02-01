@@ -28,5 +28,5 @@ signals:
 	void updateProssorbarSignal();
 
 private:
-	QThreadPool* mThreadPool; //!< 用于在中上计算的时候使用
+	QThreadPool* m_ThreadPool; //!< 用于在中上计算的时候使用
 };
