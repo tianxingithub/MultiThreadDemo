@@ -1,15 +1,20 @@
 #include "CalculateRunnable.h"
 #include <QThread>
 
-CalculateRunnable::~CalculateRunnable()
+namespace ThreadDemo
 {
-	auto test_thread_id = QThread::currentThreadId();
-	int i = 1;
-}
 
-void CalculateRunnable::run()
-{
-	QThread::msleep(500);
+	CalculateRunnable::~CalculateRunnable()
+	{
+		auto test_thread_id = QThread::currentThreadId();
+		int i = 1;
+	}
 
-	emit runnableFinishedSignal();
+	void CalculateRunnable::run()
+	{
+		QThread::msleep(500);
+
+		emit runnableFinishedSignal();
+	}
+
 }

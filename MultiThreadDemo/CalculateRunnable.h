@@ -2,19 +2,23 @@
 #include <QRunnable>
 #include <QObject>
 
-/*
- *	QRunnable继承QObect可实现信号槽
- */
-class CalculateRunnable : public QObject, public QRunnable
+namespace ThreadDemo
 {
-	Q_OBJECT
-public:
-	~CalculateRunnable();
 
-signals:
-	void runnableFinishedSignal(); 
+	/*
+	 *	QRunnable继承QObect可实现信号槽
+	 */
+	class CalculateRunnable : public QObject, public QRunnable
+	{
+		Q_OBJECT
+	public:
+		~CalculateRunnable();
 
-protected:
-	void run() override;
-};
+	signals:
+		void runnableFinishedSignal();
 
+	protected:
+		void run() override;
+	};
+
+}
