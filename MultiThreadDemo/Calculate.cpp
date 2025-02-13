@@ -25,7 +25,7 @@ namespace ThreadDemo
 		m_ThreadPool->setMaxThreadCount(aInput.threadMaxCount); // 设置线程池的最大线程数为1
 		for (int i = 0; i < aInput.calculateCount; i++)
 		{
-			CalculateRunnable* runnable = new CalculateRunnable;
+			CalculateRunnable* runnable = new CalculateRunnable(aInput.calculateCount - i);
 			runnable->setAutoDelete(true); // 设置任务结束后自动删除
 			m_ThreadPool->start(runnable);
 
