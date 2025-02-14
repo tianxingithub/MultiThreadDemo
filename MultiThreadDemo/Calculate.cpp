@@ -12,6 +12,13 @@ namespace ThreadDemo
 		m_ThreadPool = nullptr;
 	}
 
+	void Calculate::directDoSomeThing()
+	{
+		//!@ 测试外部调用接口与槽函数响应是否在同一线程中
+		auto test_thread_id = QThread::currentThreadId(); 
+		int i = 1;
+	}
+
 	Calculate::~Calculate()
 	{
 
@@ -47,6 +54,27 @@ namespace ThreadDemo
 			// 		delete mThreadPool;
 			// 		mThreadPool = nullptr;
 		}
+	}
+
+	void Calculate::doSomeThingSlot()
+	{
+		auto test_thread_id = QThread::currentThreadId();
+		int i = 1;
+	}
+
+// 	void Calculate::testtMultiDataSlot(const QVector<double>& aXDatas, const QVector<double>& aYDatas)
+	void Calculate::testtMultiDataSlot(const QVector<QStringList>& aDatas)
+	{
+// 		int x_data_size = aXDatas.size();
+// 		int y_data_size = aYDatas.size();
+// 		if (x_data_size != y_data_size)
+// 		{
+// 			return;
+// 		}
+
+
+		int data_size = aDatas.size();
+		int i = 1;
 	}
 
 }

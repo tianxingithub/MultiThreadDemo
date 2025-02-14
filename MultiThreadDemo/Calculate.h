@@ -20,11 +20,17 @@ namespace ThreadDemo
 
 	public:
 		Calculate(QObject* parent = nullptr);
+		void directDoSomeThing(); //!< 直接调用还是在主线程中执行，通过信号槽调用则在子线程中执行
 		~Calculate();
 
 	public slots:
 		void startCalculate(const CalculateInputStruct aInput);
 		void cancelCalculate();
+		void doSomeThingSlot();
+
+		//!@ 测试用
+// 		void testtMultiDataSlot(const QVector<double>& aXDatas, const QVector<double>& aYDatas);
+		void testtMultiDataSlot(const QVector<QStringList>& aDatas);
 
 	signals:
 		void calculateFinishedSignal();

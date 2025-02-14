@@ -18,10 +18,10 @@ namespace ThreadDemo
 
         connect(ui->btn_calculate,        &QPushButton::clicked, this, &MultiThreadDemo::btn_calculate_slot);
         connect(ui->btn_cancel_calculate, &QPushButton::clicked, this, &MultiThreadDemo::btn_cancel_calculate_slot);
+        connect(ui->btn_test_multi_data,  &QPushButton::clicked, this, &MultiThreadDemo::btn_test_multi_data_slot);
 
-        m_Thread = new QThread();
-        m_Calculate = new Calculate();
-
+		m_Thread = new QThread();
+		m_Calculate = new Calculate();
         m_Calculate->moveToThread(m_Thread); // 改变mCalculate的线程依附关系，将计算类放在线程中执行
 
         //! 释放堆空间资源，避免内存泄露
@@ -39,6 +39,15 @@ namespace ThreadDemo
         connect(m_Calculate, &Calculate::updateProssorbarSignal,  this, &MultiThreadDemo::update_prossorbar_slot,  Qt::QueuedConnection);   // 每计算一次完一次任务，更新界面进度条
 
         m_Thread->start(); // 启动线程，线程默认开启事件循环，并且线程正处于事件循环状态
+
+        //!@ 测试用
+//         m_Calculate->directDoSomeThing(); // 还是在主线程中执行
+        connect(this, &MultiThreadDemo::doSomeThingSignal, m_Calculate, &Calculate::doSomeThingSlot, Qt::QueuedConnection);
+        connect(this, &MultiThreadDemo::directDoSomeThingSignal, m_Calculate, &Calculate::directDoSomeThing, Qt::QueuedConnection);
+        emit doSomeThingSignal();
+        emit directDoSomeThingSignal();
+
+        connect(this, &MultiThreadDemo::testMultiDataSignal, m_Calculate, &Calculate::testtMultiDataSlot, Qt::DirectConnection);
     }
 
     MultiThreadDemo::~MultiThreadDemo()
@@ -101,7 +110,29 @@ namespace ThreadDemo
         emit cancleCalculateSignal();
     }
 
-    void MultiThreadDemo::calculate_finished_slot()
+	void MultiThreadDemo::btn_test_multi_data_slot()
+	{
+        QVector<double> xDatas,yDatas;
+        for (int i = 0; i < 10; i++)
+        {
+            xDatas.push_back(i);
+            yDatas.push_back(i*i);
+        }
+
+        QVector<QStringList> datas;
+        for (int i = 0; i < 10; i++)
+        {
+            QStringList row;
+            row.push_back(QString::number(i));
+            row.push_back(QString::number(i*i));
+            datas.push_back(row);
+        }
+
+//         emit testMultiDataSignal(xDatas, yDatas);
+        emit testMultiDataSignal(datas);
+	}
+
+	void MultiThreadDemo::calculate_finished_slot()
     {
         m_CalculateStatus = false;
         QString finished_msg = u8"计算完成，当前时间：" + QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz");
